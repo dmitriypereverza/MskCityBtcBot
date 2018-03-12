@@ -21,7 +21,7 @@ def message_handler(request):
 def message_handler(request):
     if request.text in config.answers.keys():
         bot.send_message(request.chat.id, config.answers[request.text],
-                         reply_markup=telebot.types.ReplyKeyboardHide())
+                         reply_markup=telebot.types.ReplyKeyboardRemove())
 
 @server.route("/{}".format(config.token), methods=['POST'])
 def getMessage():
