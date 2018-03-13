@@ -1,2 +1,2 @@
-web: gunicorn run.py
-bot: gunicorn run.py
+web: gunicorn run:server
+bot: gunicorn run:server
