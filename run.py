@@ -8,7 +8,7 @@ from flask import Flask, request
 import config
 import utils
 
-bot = telebot.TeleBot(config.token)
+bot = telebot.TeleBot(os.environ.get('TELEGRAM_TOKEN'))
 server = Flask(__name__)
 
 @bot.message_handler(commands=['start'])
@@ -23,7 +23,7 @@ def message_handler(request):
         bot.send_message(request.chat.id, config.answers[request.text],
                          reply_markup=telebot.types.ReplyKeyboardRemove())
 
-@server.route("/{}".format(config.token), methods=['POST'])
+@server.route("/{}".format(os.environ.get('TELEGRAM_TOKEN')), methods=['POST'])
 def getMessage():
     bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
     return "!", 200
@@ -31,7 +31,7 @@ def getMessage():
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url="https://{}/{}".format(config.HEROKU_APP_NAME, config.token))
+    bot.set_webhook(url="https://{}/{}".format(config.HEROKU_APP_NAME, os.environ.get('TELEGRAM_TOKEN')))
     return "!", 200
 
 if __name__ == '__main__':
