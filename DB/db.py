@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from vedis import Vedis
-import config
+
+from app import config
 
 # Пытаемся узнать из базы «состояние» пользователя
 def get_current_state(user_id):

@@ -1,27 +1,20 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import os
-
 import re
+
 import telebot
 from flask import Flask, request
 
-import config
 import utils
 from DB import db
+from app import config
+from app.xml_config import XMLConifgBot
 
-# token = os.environ.get('TELEGRAM_TOKEN')
-token = config.TELEGRAM_TOKEN
-
+token = os.environ.get('TELEGRAM_TOKEN', config.TELEGRAM_TOKEN)
 bot = telebot.TeleBot(token)
 server = Flask(__name__)
-bot.remove_webhook()
-
-def getTransitionByText(chat_id, text):
-    stateSetting = config.BOT_STATES[db.get_current_state(chat_id)]
-    for transition in stateSetting['transitions']:
-        if re.match(transition['input'], text):
-            return transition
+botConfig = XMLConifgBot(config.xml_config_path)
 
 @bot.message_handler(commands=['start'])
 def message_handler(request):
@@ -30,9 +23,9 @@ def message_handler(request):
 
 @bot.message_handler()
 def main_message_handler(request):
-    transition = getTransitionByText(request.chat.id, request.text)
+    transition = botConfig.getTransitionByText(db.get_current_state(request.chat.id), request.text)
     if transition:
-        bot.send_message(request.chat.id, transition['text'], reply_markup=utils.generate_markup(transition['keyboard_btn']))
+        bot.send_message(request.chat.id, transition['text'], reply_markup=utils.generate_markup(transition['keyboard_btn'].split("||")))
         db.set_state(request.chat.id, transition['next'])
 
 @server.route("/{}".format(token), methods=['POST'])
