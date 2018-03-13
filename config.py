@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-HEROKU_APP_NAME = 'warm-lowlands-57042.herokuapp.com'
+HEROKU_APP_NAME = 'warm-taiga-86371.herokuapp.com'
 token = "568880226:AAGX19mmh0jgT2BrQqz2johhzJiGPFc0k80"
 
 CHANNEL_NAME = '@omagat920'
