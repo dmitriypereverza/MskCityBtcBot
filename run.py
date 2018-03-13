@@ -34,4 +34,5 @@ def webhook():
     bot.set_webhook(url="https://{}/{}".format(config.HEROKU_APP_NAME, config.token))
     return "!", 200
 
-server.run()
+if __name__ == '__main__':
+    server.run(debug=True)
