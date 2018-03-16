@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 from enum import Enum
-from app.xml_config import XMLConifgBot
+from app.XmlConfigParser import XMLConifgBot
 
 HEROKU_APP_NAME = 'warm-taiga-86371.herokuapp.com'
 env = 'dev'

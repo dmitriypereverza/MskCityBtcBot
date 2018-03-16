@@ -2,39 +2,45 @@
     <state name="start">
         <transition
                 input="^/start$"
-                next="select_action"
+                next_state="select_action"
                 text="Что бы вы хотели?"
+                exec=""
                 keyboard_btn="Купить bitcoin||Продать bitcoin||Связаться с менеджером"/>
     </state>
     <state name="select_action">
         <transition
                 input="^Купить bitcoin$"
-                next="end_state"
+                next_state="end_state"
                 text="На какую сумму вы хотите купить?"
+                exec=""
                 keyboard_btn=""/>
         <transition
                 input="^Продать bitcoin$"
-                next="end_state"
+                next_state="end_state"
+                exec=""
                 text="Какое кол-во bitcoin вы хотите продать?"
                 keyboard_btn=""/>
         <transition
                 input="^Связаться с менеджером$"
-                next="manager_connect"
+                next_state="manager_connect"
+                exec=""
                 text="Переадресовываю вас на менеджера! Задайте свой вопрос."
                 keyboard_btn=""/>
     </state>
     <state name="manager_connect">
         <transition
                 input=".+"
-                next="end_state"
+                next_state="end_state"
                 text="Ваш вопрос принят в обработку. Ожидайте..."
+                exec=""
                 keyboard_btn="Хорошо||Спасибо"/>
     </state>
     <state name="end_state">
         <transition
                 input=".+"
-                next="start"
+                next_state="start"
                 text="Спасибо за использование нашего бота"
+                exec=""
                 keyboard_btn=""/>
     </state>
 </config>

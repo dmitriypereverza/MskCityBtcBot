@@ -3,7 +3,7 @@
 import telebot
 
 def generate_markup(answers):
-    if len(answers) <= 1 and not answers[0]:
+    if not answers:
         return telebot.types.ReplyKeyboardRemove()
     markup = telebot.types.ReplyKeyboardMarkup(one_time_keyboard=True, resize_keyboard=True)
     for item in answers:

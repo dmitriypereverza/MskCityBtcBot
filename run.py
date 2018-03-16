@@ -1,20 +1,22 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 import os
-import re
 
+import inject
 import telebot
 from flask import Flask, request
 
 import utils
 from DB import db
 from app import config
-from app.xml_config import XMLConifgBot
+from app import DIConfig
+from app.XmlConfigParser import XMLConifgBot
+
 
 token = os.environ.get('TELEGRAM_TOKEN', config.TELEGRAM_TOKEN)
 bot = telebot.TeleBot(token)
 server = Flask(__name__)
-botConfig = XMLConifgBot(config.xml_config_path)
+botConfig = inject.instance('statesConfig')
 
 @bot.message_handler(commands=['start'])
 def message_handler(request):
@@ -23,10 +25,12 @@ def message_handler(request):
 
 @bot.message_handler()
 def main_message_handler(request):
-    transition = botConfig.getTransitionByText(db.get_current_state(request.chat.id), request.text)
+    state = botConfig.getStateByName(db.get_current_state(request.chat.id))
+    transition = state.getTransitionByText(request.text)
     if transition:
-        bot.send_message(request.chat.id, transition['text'], reply_markup=utils.generate_markup(transition['keyboard_btn'].split("||")))
-        db.set_state(request.chat.id, transition['next'])
+        bot.send_message(request.chat.id, transition.getText(), reply_markup=utils.generate_markup(transition.getKeyboardBtn()))
+        db.set_state(request.chat.id, transition.getNextState())
+        transition.execute()
 
 @server.route("/{}".format(token), methods=['POST'])
 def getMessage():
